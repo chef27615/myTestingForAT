@@ -2,6 +2,10 @@ const app = require('express')()
 const bodyParser = require('body-parser')
 const logger = require('morgan')
 
+const countries = require('./countries-model')
+const markets = require('./markets-model')
+
+
 const port = process.env.PORT || 3030
 
 app.use(logger('dev'))
