@@ -12,12 +12,12 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-let name = ''
+// let name = ''
 const countries = app.get('*', async (req, res) => {
-  // const{id, name} = req.body;
+  
    try{
-      names = await Countries.get();
-    //  res.status(200).json(countries)
+      req.body = await Countries.get();
+     res.status(200).json(req.body.name)
    }catch(err){console.log(err)}
  })
 
@@ -32,7 +32,7 @@ app.post('*', (req, res) => {
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
-      ${name}
+      ${countries}
       `;
       break;
     case '1':
