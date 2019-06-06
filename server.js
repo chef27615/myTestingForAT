@@ -15,15 +15,16 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.get('*', (req, res) => {
   res.send('ussg testing ground')
 })
+const countries = app.get('/', async (req, res) => {
+   try{
+     const countries = await Countries.get();
+     res.status(200).json(countries)
+   }catch(err){console.log(err)}
+ })
 
 app.post('*', (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
   
- const countries = await app.get('/', async (req, res) => {
-    try{
-      const countries = await Countries.get();
-    }catch(err){console.log(err)}
-  })
 
   switch(text) {
     case '':
