@@ -12,9 +12,7 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-let name = ''
 const countries = app.get('*', async (req, res) => {
-  
    try{
       names = await Countries.get();
      res.status(200).json(countries)
