@@ -2,8 +2,8 @@ const app = require('express')()
 const bodyParser = require('body-parser')
 const logger = require('morgan')
 
-const countries = require('./countries-model')
-const markets = require('./markets-model')
+const Countries = require('./countries-model')
+const Markets = require('./markets-model')
 
 
 const port = process.env.PORT || 3030
@@ -16,14 +16,20 @@ app.get('*', (req, res) => {
   res.send('ussg testing ground')
 })
 
-app.post('*', (req, res) => {
+app.post('*', async (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
   
+  const countries = app.get('/', async(req, res) => {
+    try{
+      const countries = await Countries.get();
+      res.status(200).json(countries)
+    }catch(err){res.status(400).json({message:'bad request'})}
+  })
+
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
-      1. Keyna
-      2. take me home
+      ${countries}
       `;
       break;
     case '1':
