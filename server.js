@@ -12,12 +12,12 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-const countries = app.get('*', async (req, res) => {
-   try{
-      names = await Countries.get();
-     res.status(200).json(countries)
-   }catch(err){console.log(err)}
- })
+// const countries = app.get('*', async (req, res) => {
+//    try{
+//       names = await Countries.get();
+//      res.status(200).json(countries)
+//    }catch(err){console.log(err)}
+//  })
 
 app.get('*', (req, res) => {
   res.send('hello')
@@ -30,7 +30,7 @@ app.post('*', (req, res) => {
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
-      ${name}
+       
       `;
       break;
     case '1':
