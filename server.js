@@ -18,7 +18,7 @@ app.get('*', (req, res) => {
 
 app.post('*', (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
-
+  
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
