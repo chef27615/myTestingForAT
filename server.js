@@ -16,14 +16,13 @@ app.get('*', (req, res) => {
   res.send('ussg testing ground')
 })
 
-app.post('*', async (req, res) => {
+app.post('*', (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
   
  const countries = await app.get('/', async (req, res) => {
     try{
       const countries = await Countries.get();
-      res.status(200).json(countries)
-    }catch(err){res.status(400).json({message:'bad request'})}
+    }catch(err){console.log(err)}
   })
 
   switch(text) {
