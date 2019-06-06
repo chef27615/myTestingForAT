@@ -19,7 +19,7 @@ app.get('*', (req, res) => {
 app.post('*', async (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
   
-  const countries = app.get('/', async(req, res) => {
+ const countries = await app.get('/', async (req, res) => {
     try{
       const countries = await Countries.get();
       res.status(200).json(countries)
