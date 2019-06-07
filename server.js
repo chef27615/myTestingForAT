@@ -23,7 +23,7 @@ app.get('*', (req, res) => {
 })
 
 app.post('*', (req, res) => {
-  // let name = countries[0].name
+  let name = 'kenya'
   let {sessionId, serviceCode, phoneNumber, name, text} = req.body
 
   switch(text) {
