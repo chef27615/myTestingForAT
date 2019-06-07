@@ -1,6 +1,6 @@
 const app = require('express')()
 const bodyParser = require('body-parser')
-// const logger = require('morgan')
+const logger = require('morgan')
 
 const Countries = require('./countries-model')
 const Markets = require('./markets-model')
@@ -26,7 +26,7 @@ app.get('*', (req, res) => {
 
 
 console.log(name);
-let name = countries[0]['name']
+// let name = countries[0]['name']
 
 app.post('*', (req, res) => {
   
