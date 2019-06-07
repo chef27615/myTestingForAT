@@ -18,12 +18,18 @@ let countries = app.get('*', async (req, res) => {
      res.status(200).json(names)
     }catch(err){console.log(err)}
   })
+
+
 app.get('*', (req, res) => {
   res.send(countries)
 })
 
+
+console.log(name);
+
 app.post('*', (req, res) => {
-  let name = 'kenya'
+  let name = countries[0].name
+  
   let {sessionId, serviceCode, phoneNumber, text} = req.body
 
   switch(text) {
