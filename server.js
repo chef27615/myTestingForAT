@@ -20,7 +20,7 @@ const countries = app.get('*', async (req, res) => {
  })
 
 app.get('*', (req, res) => {
-  res.send('hello')
+  res.send(countries)
 })
 
 app.post('*', (req, res) => {
