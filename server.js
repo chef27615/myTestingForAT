@@ -16,9 +16,9 @@ const countries = app.get('*', async (req, res) => {
    try{
       names = await Countries.get();
      res.status(200).json(names)
-     console.log(countries);
-   }catch(err){console.log(err)}
- })
+    }catch(err){console.log(err)}
+  })
+  console.log(countries[0].name);
 app.get('*', (req, res) => {
   res.send(countries)
 })
@@ -30,7 +30,9 @@ app.post('*', (req, res) => {
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
-       ${countries}
+       ${countries[0].id} ${countries[0].name}
+       ${countries[1].id} ${countries[1].name}
+       ${countries[2].id} ${countries[2].name}
       `;
       break;
     case '1':
