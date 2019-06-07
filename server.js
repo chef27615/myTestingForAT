@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 const countries = app.get('*', async (req, res) => {
    try{
       names = await Countries.get();
-     res.status(200).json(countries)
+     res.status(200).json(names)
      console.log(countries);
    }catch(err){console.log(err)}
  })
