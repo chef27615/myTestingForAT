@@ -18,7 +18,6 @@ const countries = app.get('*', async (req, res) => {
      res.status(200).json(names)
     }catch(err){console.log(err)}
   })
-  console.log(countries[0].name);
 app.get('*', (req, res) => {
   res.send(countries)
 })
