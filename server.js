@@ -12,7 +12,7 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-const countries = app.get('*', async (req, res) => {
+let countries = app.get('*', async (req, res) => {
    try{
       names = await Countries.get();
      res.status(200).json(names)
@@ -24,13 +24,12 @@ app.get('*', (req, res) => {
 
 app.post('*', (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
-  
+  let {id, name} = countries[0]
 
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
-       1. Kenya
-       2. Take me home
+       ${id} ${name}
       `;
       break;
     case '1':
