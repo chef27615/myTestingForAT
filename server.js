@@ -18,7 +18,7 @@ const countries = app.get('*', async (req, res) => {
      res.status(200).json(countries)
    }catch(err){console.log(err)}
  })
-
+console.log(countries);
 app.get('*', (req, res) => {
   res.send(countries)
 })
