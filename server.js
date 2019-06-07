@@ -24,12 +24,12 @@ app.get('*', (req, res) => {
 
 app.post('*', (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
-  
+  let name = countries[0].name
 
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
-       ${countries}
+       ${name}
       `;
       break;
     case '1':
