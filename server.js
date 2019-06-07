@@ -24,7 +24,7 @@ app.get('*', (req, res) => {
 
 app.post('*', (req, res) => {
   let name = 'kenya'
-  let {sessionId, serviceCode, phoneNumber, name, text} = req.body
+  let {sessionId, serviceCode, phoneNumber, text} = req.body
 
   switch(text) {
     case '':
