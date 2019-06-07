@@ -29,9 +29,8 @@ app.post('*', (req, res) => {
   switch(text) {
     case '':
       response= `CON Welcome to Sauti Marketplace, country selection 
-       ${countries[0].id} ${countries[0].name}
-       ${countries[1].id} ${countries[1].name}
-       ${countries[2].id} ${countries[2].name}
+       1. Kenya
+       2. Take me home
       `;
       break;
     case '1':
