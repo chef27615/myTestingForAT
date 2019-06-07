@@ -21,7 +21,7 @@ let countries = app.get('*', async (req, res) => {
 
 
 app.get('*', (req, res) => {
-  res.send(countries[0].name)
+  res.send(countries)
 })
 
 
