@@ -4,7 +4,7 @@ const logger = require('morgan')
 const UssdMenu = require('ussd-menu-builder');
 
 
-const menu = new UssdMenu();
+let menu = new UssdMenu();
 const Countries = require('./countries-model')
 const Markets = require('./markets-model')
 
@@ -15,23 +15,48 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-let countries = app.get('*', async (req, res) => {
-   try{
-      names = await Countries.get();
-     res.status(200).json(names)
-    }catch(err){console.log(err)}
-  })
+// app.get('*', async (req, res) => {
+//    try{
+//      names = await Countries.get();
+//      res.status(200).json(names)
+//     }catch(err){res.status(500).json({message:'no'})}
+//   })
 
-
-app.get('*', (req, res) => {
-  res.send(countries)
+menu.startState({
+  run: () => {
+    menu.con(`welcome, your option \n1. kenya \n2. rewanda \n3. uganda`);
+  },
+  next: {
+    '1':'kenya',
+    '2':'rewanda',
+    '3':'uganda'
+  }
+});
+menu.on('error', err => {
+  console.log(err);
 })
 
+// menu.state('kenya', {
+//   run: () => {
+//     menu.con('markets')
+//   },
+//   next: {
+//     '1':'1st market',
+//     '2':'2nd market'
+//   }
+// })
+
+menu.state('1', {
+  run : ()=> {
+    menu.end(`nothing here today, thanks for looking sucker!`)
+  }
+})
+
+
 app.post('/ussd', (req, res) => {
-  let { phoneNumber, sessionId, serviceCode, text} = req.body;
-  menu.run(text, resMsg => {
-    res.send(resMsg)
-  });
+  menu.run(req.body, ussdResult => {
+    res.send(ussdResult);
+  })
 })
 
 app.listen(port, () => {
