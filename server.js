@@ -36,15 +36,15 @@ menu.on('error', err => {
   console.log(err);
 })
 
-// menu.state('kenya', {
-//   run: () => {
-//     menu.con('markets')
-//   },
-//   next: {
-//     '1':'1st market',
-//     '2':'2nd market'
-//   }
-// })
+menu.state('1', {
+  run: () => {
+    menu.con('markets')
+  },
+  next: {
+    '1':'1st market',
+    '2':'2nd market'
+  }
+})
 
 menu.state('1', {
   run : ()=> {
