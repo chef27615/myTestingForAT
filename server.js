@@ -33,9 +33,7 @@ app.post('*', (req, res) => {
 
   switch(text) {
     case '':
-      response= `CON Welcome to Sauti Marketplace, country selection 
-       ${name}
-      `;
+      response = `${countries.get()}`
       break;
     case '1':
       response=`CON choose your market
