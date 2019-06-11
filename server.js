@@ -32,25 +32,25 @@ menu.startState({
     '3':'uganda'
   }
 });
-menu.on('error', err => {
-  console.log(err);
-})
+// menu.on('error', err => {
+//   console.log(err);
+// })
 
-menu.state('1', {
-  run: () => {
-    menu.con('markets')
-  },
-  next: {
-    '1':'1st market',
-    '2':'2nd market'
-  }
-})
+// menu.state('1', {
+//   run: () => {
+//     menu.con('markets')
+//   },
+//   next: {
+//     '1':'1st market',
+//     '2':'2nd market'
+//   }
+// })
 
-menu.state('1', {
-  run : ()=> {
-    menu.end(`nothing here today, thanks for looking sucker!`)
-  }
-})
+// menu.state('1', {
+//   run : ()=> {
+//     menu.end(`nothing here today, thanks for looking sucker!`)
+//   }
+// })
 
 
 app.post('/ussd', (req, res) => {
