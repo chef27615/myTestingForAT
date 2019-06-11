@@ -25,8 +25,8 @@ app.get('*', (req, res) => {
 })
 
 
-// console.log(name);
-// let name = countries[0]['name']
+console.log(name);
+let name = countries[0].name
 
 app.post('*', (req, res) => {
   let {sessionId, serviceCode, phoneNumber, text} = req.body
