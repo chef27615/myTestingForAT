@@ -2,7 +2,7 @@ const app = require('express')()
 const bodyParser = require('body-parser')
 const logger = require('morgan')
 const UssdMenu = require('ussd-menu-builder');
-
+const db = require('./data/dbConfig')
 
 let menu = new UssdMenu();
 const Countries = require('./countries-model')
@@ -22,7 +22,7 @@ app.get('*', async (req, res) => {
     }catch(err){res.status(500).json({message:'no'})}
   })
 
-  app.post("*", (req, res) => {
+  app.post("*", async (req, res) => {
     let { sessionId, serviceCode, phoneNumber, text } = req.body;
     let accountNumber = "ACC1001";
     let prices = "NGN 10,000";
@@ -49,23 +49,23 @@ app.get('*', async (req, res) => {
         response =
           "CON Choose your product \n 1. Eggs \n 2. Exotic Eggs \n 3. Local Eggs";
         break;
-      case "1*1*1*1*1":
-        let sql = `
-        SELECT price 
-        FROM products
-        WHERE country = BTI AND market = 'Bujumbaru' AND product = 'beans'`;
-        let option = db.raw(sql, (err, res) => {
-          if (err) {
-            return console.log(err.message);
-          } else {
-            console.log(res);
-          }
-        });
-  
-        response = `END Current prices for \n Eggs ${option}`;
-        break;
       default:
-        response = "Bad request!";
+        let sql = `
+        SELECT name 
+        FROM countries`;
+        try {
+          const names = await db.raw(sql);
+        console.log(names);
+          response = names.rows[0].name
+        } catch (error) {
+          console.log(error);
+          // do stuff with error
+        }
+  
+        // response = `END Current prices for \n Eggs ${option}`;
+        break;
+      // default:
+      //   response = "Bad request!";
     }
     res.send(response);
   });
