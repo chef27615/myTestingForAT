@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 menu.startState({
   run: () => {
-    menu.con(`welcome, your option \n1. kenya \n2. rewanda \n3. uganda`);
+    menu.con(`welcome, your option \n1. kenya \n2. rwanda \n3. uganda`);
   },
   next: {
     '1':'kenya',
