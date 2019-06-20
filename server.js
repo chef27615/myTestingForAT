@@ -6,7 +6,6 @@ const db = require('./data/dbConfig')
 
 let menu = new UssdMenu();
 const Countries = require('./countries-model')
-const Markets = require('./markets-model')
 
 
 const port = process.env.PORT || 3030
@@ -15,97 +14,104 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.get('*', async (req, res) => {
-   try{
-     names = await Countries.get();
-     res.status(200).json(names)
-    }catch(err){res.status(500).json({message:'no'})}
-  })
-
-  app.post("*", async (req, res) => {
-    let { sessionId, serviceCode, phoneNumber, text } = req.body;
-    let accountNumber = "ACC1001";
-    let prices = "NGN 10,000";
-    let response = "";
-    let country = "BTI";
-    switch (text) {
-      case "":
-        response =
-          "CON Choose your country \n 1. BDI \n 2. DRC \n 3. KEN \n 4. MWI \n 5. RWA \n 6. SSD \n 7. TZA \n 8. UGA";
-        break;
-      case "1":
-        response =
-          "CON Choose your marketplace \n 1. Bujumbura \n 2. Gitega \n 3. Ngozi";
-        break;
-      case "1*1":
-        response =
-          "CON Choose your commodity \n 1. Animal Products \n 2. Beans \n 3. Cereals";
-        break;
-      case "1*1*1":
-        response =
-          "CON Choose your sub-category \n 1. Animal Products \n 2. Livestock \n 3. Poultry";
-        break;
-      case "1*1*1*1":
-        response =
-          "CON Choose your product \n 1. Eggs \n 2. Exotic Eggs \n 3. Local Eggs";
-        break;
-      default:
-        let sql = `
-        SELECT name 
-        FROM countries`;
-        try {
-          const names = await db.raw(sql);
-        console.log(names);
-          response = names.rows[0].name
-        } catch (error) {
-          console.log(error);
-          // do stuff with error
-        }
+const countries = (phoneNumber, session, text) => {
+  const name = 'kenya';
   
-        // response = `END Current prices for \n Eggs ${option}`;
-        break;
-      // default:
-      //   response = "Bad request!";
-    }
-    res.send(response);
-  });
-
-// menu.startState({
-//   run: () => {
-//     menu.con(`welcome, your option \n1. kenya \n2. rwanda \n3. uganda`);
-//   },
-//   next: {
-//     '1':'kenya',
-//     '2':'rwanda',
-//     '3':'uganda'
-//   }
-// });
-// menu.on('error', err => {
-//   console.log(err);
-// })
-
-// menu.state('1', {
-//   run: () => {
-//     menu.con('markets')
-//   },
-//   next: {
-//     '1':'1st market',
-//     '2':'2nd market'
-//   }
-// })
-
-// menu.state('1', {
-//   run : ()=> {
-//     menu.end(`nothing here today, thanks for looking sucker!`)
-//   }
-// })
+  return db('countries').where({name})
+}
 
 
-// app.post('/ussd', (req, res) => {
-//   menu.run(req.body, ussdResult => {
-//     res.send(ussdResult);
-//   })
-// })
+menu.startState({
+  
+  run: () => {
+    menu.con(`\n1. Go To Market \n2. goodbye`)
+  }, 
+  next: {
+    '1': 'position',
+    '2': 'goodbye'
+  }
+})
+
+menu.state('goodbye', {
+  run: () => {
+    menu.end(`goodbye`)
+  }
+})
+
+menu.state('position', {
+  run: () => {
+    menu.con(`\n1. buyer \n2. seller`)
+  },
+  next: {
+    '1': 'buyer',
+    '2': 'seller'
+  }
+})
+
+
+menu.state('buyer', {
+  run: () => {
+    const {phoneNumber, sessionId, text} = menu.args;
+    countries(phoneNumber, sessionId, text)
+    .then(res => {
+      if(res.length>0){
+        let ops ='';
+        for(let i= 0; i< res.length; i++) {
+          ops +=`{res[i].id} : ${res[i].name}`
+        }
+        menu.con(`${res.length} ${ops}`)
+      }else{
+        menu.con('nope')
+      }
+    })
+  }, 
+  defaultNext: 'goodbye'
+});
+
+
+menu.on('error', err => {
+  console.log(err);
+})
+
+
+menu.state('kenya', {
+  run: () => {
+    menu.con('markets, \n1. 1st market \n2. 2nd market')
+  },
+  next: {
+    '1':'1st market',
+    '2':'2nd market'
+  }
+})
+
+
+menu.state('1st market', {
+  run : ()=> {
+    menu.end(`nothing here today, thanks for looking sucker!`)
+  }
+})
+
+
+app.post('*', (req, res) => {
+  let args = {
+    phoneNumber: req.body.phoneNumber,
+    sessionId: req.body.sessionId,
+    serviceCode: req.body.serviceCode,
+    text: req.body.text
+  }
+  menu.run(args, ussdResult => {
+    // console.log("PHONE: ", args.phoneNumber);
+    // console.log("SESSION: ", args.sessionId);
+    // console.log("SERVICE CODE: ", args.serviceCode);
+    // console.log("TEXT: ", args.text);
+    console.log('args', args);
+    db('sessions').insert(args.toString()).then(res => {
+      
+      res.status(201).json(args)
+    })
+    res.send(ussdResult);
+  })
+})
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`)
